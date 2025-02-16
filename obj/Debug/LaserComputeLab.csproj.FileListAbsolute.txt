@@ -10,3 +10,4 @@ C:\Users\79333\source\repos\LaserComputeLab\obj\Debug\LaserComputeLab.csproj.Cor
 C:\Users\79333\source\repos\LaserComputeLab\obj\Debug\LaserComputeLab.exe
 C:\Users\79333\source\repos\LaserComputeLab\obj\Debug\LaserComputeLab.pdb
 C:\Users\79333\source\repos\LaserComputeLab\obj\Debug\LaserComputeLab.ManagerCOM.resources
+C:\Users\79333\source\repos\LaserComputeLab\obj\Debug\LaserComputeLab.DebugIOConsole.resources

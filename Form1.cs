@@ -18,6 +18,7 @@ namespace LaserComputeLab
         private static string databuffer = String.Empty;
         private static string databuffer_add = String.Empty;
         private int mode = 0;
+        private bool correctCheck_state = true;
         public Form1()
         {
             InitializeComponent();
@@ -58,7 +59,13 @@ namespace LaserComputeLab
                 MessageBox.Show("Не получилось отправить данные на порт " + mcom.getPortname(), "Ошибка отправки данных");
             }
         }
-        private async void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        private string summator_1bit_sim(decimal A, decimal B)
+        {
+            if (A == 1 && B == 1) return "10";
+            if (A == 1 || B == 1) return "01";
+            else return "00";
+        }
+        private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             if (mcom != null)
             {
@@ -79,6 +86,21 @@ namespace LaserComputeLab
                         Invoke(new Action(() => roof1.Text = roof));
                     }
                 }
+                else if (mode == 2)
+                {
+                    // Получение вычисленных данных
+                    if (databuffer_add.Contains("-----\r\n"))
+                    {
+                        // Начинаем парсить
+                        string[] lines = databuffer_add.Split('\n');
+                        Invoke(new Action(() => outputData.Text = lines[7].Trim('\r').Trim('\n')));
+                        if (correctCheck_state)
+                        {
+                            if (String.Equals(outputData.Text, resultProb.Text)) Invoke(new Action(() => correctCheckLbl.Text = "Корректный ответ"));
+                            else Invoke(new Action(() => correctCheckLbl.Text = "Некорректный ответ"));
+                        }
+                    }
+                }
             }
         }
         private void clearDebug_Click(object sender, EventArgs e)
@@ -93,6 +115,38 @@ namespace LaserComputeLab
                 groupDebug.Visible = true;
             else if (menuItem.CheckState == CheckState.Unchecked)
                 groupDebug.Visible = false;
+        }
+
+        private void computeRun_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                resultProb.Text = summator_1bit_sim(numA.Value, numB.Value);
+                if (!sp.IsOpen) sp.Open();
+                string data = String.Format("{0} {1}", Convert.ToString(numA.Value), Convert.ToString(numB.Value));
+                sp.WriteLine(data);
+                databuffer_add = String.Empty;
+                mode = 2;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Не получилось отправить данные на порт " + mcom.getPortname(), "Ошибка отправки данных");
+            }
+        }
+
+        private void correctCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
+            if (menuItem.CheckState == CheckState.Checked)
+                correctCheck_state = true;
+            else if (menuItem.CheckState == CheckState.Unchecked)
+                correctCheck_state = false;
+        }
+
+        private void debugIOconsole_Click(object sender, EventArgs e)
+        {
+            DebugIOConsole ioconsole = new DebugIOConsole(mcom, sp);
+            ioconsole.Show();
         }
     }
 }

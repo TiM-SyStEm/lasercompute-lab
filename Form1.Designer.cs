@@ -35,7 +35,7 @@
             this.debugToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.connectedStatus = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.computeRun = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panelBase = new System.Windows.Forms.Panel();
@@ -50,7 +50,7 @@
             this.clearDebug = new System.Windows.Forms.Button();
             this.debugInput = new System.Windows.Forms.RichTextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.outputData = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.computeAccuracy = new System.Windows.Forms.Button();
             this.accuracy = new System.Windows.Forms.TextBox();
@@ -66,6 +66,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.labindex = new System.Windows.Forms.ListBox();
+            this.correctCheck = new System.Windows.Forms.ToolStripMenuItem();
+            this.correctCheckLbl = new System.Windows.Forms.Label();
+            this.debugIOconsole = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -90,7 +93,7 @@
             this.tools,
             this.toolStripSeparator1,
             this.connectedStatus,
-            this.toolStripButton1,
+            this.computeRun,
             this.toolStripSeparator2});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -103,7 +106,9 @@
             this.tools.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.managerCOM,
-            this.debugToolStrip});
+            this.debugToolStrip,
+            this.correctCheck,
+            this.debugIOconsole});
             this.tools.Image = ((System.Drawing.Image)(resources.GetObject("tools.Image")));
             this.tools.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tools.Name = "tools";
@@ -136,13 +141,14 @@
             this.connectedStatus.Size = new System.Drawing.Size(119, 24);
             this.connectedStatus.Text = "Не подключено";
             // 
-            // toolStripButton1
+            // computeRun
             // 
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(168, 24);
-            this.toolStripButton1.Text = "Запуск вычисления";
+            this.computeRun.Image = ((System.Drawing.Image)(resources.GetObject("computeRun.Image")));
+            this.computeRun.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.computeRun.Name = "computeRun";
+            this.computeRun.Size = new System.Drawing.Size(168, 24);
+            this.computeRun.Text = "Запуск вычисления";
+            this.computeRun.Click += new System.EventHandler(this.computeRun_Click);
             // 
             // toolStripSeparator2
             // 
@@ -292,7 +298,8 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.textBox1);
+            this.groupBox3.Controls.Add(this.correctCheckLbl);
+            this.groupBox3.Controls.Add(this.outputData);
             this.groupBox3.Location = new System.Drawing.Point(12, 168);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(748, 96);
@@ -300,17 +307,17 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Выходные данные";
             // 
-            // textBox1
+            // outputData
             // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox1.Location = new System.Drawing.Point(9, 36);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(100, 34);
-            this.textBox1.TabIndex = 12;
-            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.outputData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.outputData.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.outputData.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.outputData.Location = new System.Drawing.Point(9, 36);
+            this.outputData.Name = "outputData";
+            this.outputData.ReadOnly = true;
+            this.outputData.Size = new System.Drawing.Size(100, 34);
+            this.outputData.TabIndex = 12;
+            this.outputData.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // groupBox2
             // 
@@ -487,6 +494,31 @@
             this.labindex.TabIndex = 0;
             this.labindex.SelectedIndexChanged += new System.EventHandler(this.labindex_SelectedIndexChanged);
             // 
+            // correctCheck
+            // 
+            this.correctCheck.Checked = true;
+            this.correctCheck.CheckOnClick = true;
+            this.correctCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.correctCheck.Name = "correctCheck";
+            this.correctCheck.Size = new System.Drawing.Size(303, 26);
+            this.correctCheck.Text = "Проверка на корректность";
+            this.correctCheck.CheckedChanged += new System.EventHandler(this.correctCheck_CheckedChanged);
+            // 
+            // correctCheckLbl
+            // 
+            this.correctCheckLbl.AutoSize = true;
+            this.correctCheckLbl.Location = new System.Drawing.Point(134, 48);
+            this.correctCheckLbl.Name = "correctCheckLbl";
+            this.correctCheckLbl.Size = new System.Drawing.Size(0, 16);
+            this.correctCheckLbl.TabIndex = 13;
+            // 
+            // debugIOconsole
+            // 
+            this.debugIOconsole.Name = "debugIOconsole";
+            this.debugIOconsole.Size = new System.Drawing.Size(303, 26);
+            this.debugIOconsole.Text = "Отладка через I/O консоль";
+            this.debugIOconsole.Click += new System.EventHandler(this.debugIOconsole_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -525,7 +557,7 @@
         #endregion
 
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton computeRun;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ListBox labindex;
         private System.Windows.Forms.ToolStripDropDownButton tools;
@@ -549,7 +581,7 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupDebug;
         private System.Windows.Forms.RichTextBox debugInput;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox outputData;
         private System.Windows.Forms.GroupBox correct;
         private System.Windows.Forms.Button btnCorrect;
         private System.Windows.Forms.Panel panelBase;
@@ -561,6 +593,9 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button clearDebug;
         private System.Windows.Forms.ToolStripMenuItem debugToolStrip;
+        private System.Windows.Forms.ToolStripMenuItem correctCheck;
+        private System.Windows.Forms.Label correctCheckLbl;
+        private System.Windows.Forms.ToolStripMenuItem debugIOconsole;
     }
 }
 
