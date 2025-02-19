@@ -145,8 +145,15 @@ namespace LaserComputeLab
 
         private void debugIOconsole_Click(object sender, EventArgs e)
         {
-            DebugIOConsole ioconsole = new DebugIOConsole(mcom, sp);
-            ioconsole.Show();
+            if(!(sp is null))
+            {
+                DebugIOConsole ioconsole = new DebugIOConsole(mcom, sp);
+                ioconsole.Show();
+            }
+            else
+            {
+                MessageBox.Show("Нет открытого порта", "Ошибка чтения порта");
+            }
         }
     }
 }
